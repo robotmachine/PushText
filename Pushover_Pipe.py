@@ -17,25 +17,43 @@
 """ All of this is built in to Python 3. (No dependencies) """
 import os, sys, urllib, http.client, configparser, textwrap, argparse
 
-config = configparser.ConfigParser()
 
 settings = os.path.expanduser("~/.pushpipe")
+config = configparser.ConfigParser()
 
-def read_config(token=None, user=None):
-	if token is not None and token is not None:
-		config.read(settings)
-		token = config['PUSHPIPE']['token']
-		user = config['PUSHPIPE']['user']
-	if not os.path.exists(settings):
-		set_config()
-"""	if os.path.exists(settings):
-		config.read(settings)
-"""
+def main():
+	parser = argparse.ArgumentParser(description='Pushover thing', prog='Pushover Pipe')
+	parser.add_argument('-u','--user',
+		action='store', dest='user', default=None,
+		help='User key instead of reading from settings. Requires --token.')
+	parser.add_argument('-t','--token',
+		action='store', dest='token', default=None,
+		help='Token key instead of reading from settings. Requires --user.')
+	args = parser.parse_args()
+	read_config(token=args.token, user=args.user)
+
+def read_config(token, user):
+	if token is None and user is None:
+		if os.path.exists(settings):
+			config.read(settings)
+			token = config['PUSHPIPE']['token']
+			user = config['PUSHPIPE']['user']
+			message(token, user)
+		if not os.path.exists(settings):
+			set_config()
+	elif token is not None and user is not None:
+		message(token, user)
+
+def message(token, user):
+	print("API Token: ")
+	print(token)
+	print("User Key: ")
+	print(user)
+
 def set_config():
 	print(textwrap.dedent("""
 	You will need to create an app 
-	in Pushover and provide the
-	provided token.
+	in Pushover and provide the token.
 	https://pushover.net/apps
 	"""))
 	token = input("API Token: ")
@@ -49,32 +67,6 @@ def set_config():
 			       'user': user}		
 	with open(settings, 'w') as configfile:
 		config.write(configfile)
+	message(token, user)
 
-def message(token=None, user=None):
-	read_config(token, user)
-	print("API Token: ")
-	print(token)
-	print("User Key: ")
-	print(user)
-
-def main():
-	parser = argparse.ArgumentParser(description='Pushover thing', prog='Pushover Pipe')
-	parser.add_argument('-u','--user', 
-		action='store', dest='user', default=None,
-		help='User key instead of reading from settings. Requires --token.')
-	parser.add_argument('-t','--token',
-		action='store', dest='token', default=None,
-		help='Token key instead of reading from settings. Requires --user.')
-	args = parser.parse_args()
-	message(token=args.token, user=args.user)
-"""
-"""
 main()
-
-"""
-Does it work?
-print("The token is:")
-print(token)
-print("The user key is:")
-print(user)
-"""
