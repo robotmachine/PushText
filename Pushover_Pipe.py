@@ -41,22 +41,37 @@ def main():
 	parser.add_argument('--urltitle',
 		action='store', dest='UTITLE', default='Pushover Pipe URL',
 		help='Title to go with your URL.')
+	parser.add_argument('-p', '--priority',
+		action='store', dest='PRIORITY', default=None,
+		help='Priority level. "High" ignores quiet hours and "Low" sends as quiet. Default is normal.')
 	args = parser.parse_args()
-	read_config(token=args.token, user=args.user, WORDS=args.WORDS, DEV=args.DEV, TITLE=args.TITLE, URL=args.URL, UTITLE=args.UTITLE)
+	read_config(token=args.token, user=args.user, WORDS=args.WORDS, DEV=args.DEV, TITLE=args.TITLE, URL=args.URL, UTITLE=args.UTITLE, PRIORITY=args.PRIORITY)
 
-def read_config(token, user, WORDS, DEV, TITLE, URL, UTITLE):
+def read_config(token, user, WORDS, DEV, TITLE, URL, UTITLE, PRIORITY):
 	if token is None and user is None:
 		if os.path.exists(settings):
 			config.read(settings)
 			token = config['PUSHPIPE']['token']
 			user = config['PUSHPIPE']['user']
-			message(token, user, WORDS, DEV, TITLE, URL, UTITLE)
+			message(token, user, WORDS, DEV, TITLE, URL, UTITLE, PRIORITY)
 		if not os.path.exists(settings):
 			set_config()
 	elif token is not None and user is not None:
-		message(token, user, WORDS, DEV, TITLE, URL, UTITLE)
+		message(token, user, WORDS, DEV, TITLE, URL, UTITLE, PRIORITY)
 
-def message(token, user, WORDS, DEV, TITLE, URL, UTITLE):
+def message(token, user, WORDS, DEV, TITLE, URL, UTITLE, PRIORITY):
+	if PRIORITY is None:
+		PRI2=0
+	elif PRIORITY is not None:
+		if (PRIORITY == "High" or "high" or "Hi" or "HI" or "hi" or "H" or "h"):
+			PRI2=1
+		elif (PRIORITY == "Low" or "low" or "Lo" or "LO" or "lo" or "L" or "l"):
+			PRI2=-1
+		else:
+			print("What kind of priority is", PRIORITY, "?")
+			print("Priority must be either 'high' or 'low'.")
+			print("Sending with normal priority.")
+			PRI2=0
 
 	if DEV is None and URL is None:
 		conn.request("POST", "/1/messages.json",
@@ -65,6 +80,7 @@ def message(token, user, WORDS, DEV, TITLE, URL, UTITLE):
 				"user": user,
 				"title": TITLE,
 				"message": WORDS,
+				"priority": PRI2,
 			}), { "Content-type": "application/x-www-form-urlencoded" })
 
 	elif DEV is not None and URL is None:
@@ -75,6 +91,7 @@ def message(token, user, WORDS, DEV, TITLE, URL, UTITLE):
 				"title": TITLE,
 				"message": WORDS,
 				"device": DEV,
+				"priority": PRI2,
 			}), { "Content-type": "application/x-www-form-urlencoded" })
 
 	elif DEV is None and URL is not None:
@@ -86,6 +103,7 @@ def message(token, user, WORDS, DEV, TITLE, URL, UTITLE):
 				"url": URL,
 				"url_title": UTITLE,
 				"message": WORDS,
+				"priority": PRI2,
 			}), { "Content-type": "application/x-www-form-urlencoded" })
 
 	elif DEV is not None and URL is not None:
@@ -98,6 +116,7 @@ def message(token, user, WORDS, DEV, TITLE, URL, UTITLE):
 				"url_title": UTITLE,
 				"message": WORDS,
 				"device": DEV,
+				"priority": PRI2,
 			}), { "Content-type": "application/x-www-form-urlencoded" })
 
 	else:
