@@ -125,7 +125,7 @@ def message(token, user, WORDS, DEV, TITLE, URL, UTITLE, PRIORITY):
 
 	response=conn.getresponse()
 	if response.status is 200:
-		print("Everything went well.")
+		quit()
 	else:
 		print("Oops. You bwoke it.")
 		print("Pushover sez:", response.status, response.reason)
