@@ -68,9 +68,6 @@ def message(token, user, WORDS, DEV, TITLE, URL, UTITLE, PRIORITY):
 		elif (PRIORITY == "Low" or "low" or "Lo" or "LO" or "lo" or "L" or "l"):
 			PRI2=-1
 		else:
-			print(textwrap.dedent("What kind of priority is ",PRIORITY,"?"))
-			print(textwrap.dedent("Priority must be either 'high' or 'low'."))
-			print(textwrap.dedent("Sending with normal priority."))
 			PRI2=0
 
 	if DEV is None and URL is None:
