@@ -19,7 +19,7 @@ config = configparser.ConfigParser()
 conn = http.client.HTTPSConnection("api.pushover.net:443")
 
 def main():
-	parser = argparse.ArgumentParser(description='Pushover thing', prog='Pushover Pipe')
+	parser = argparse.ArgumentParser(description='Pushover Pipe: Sends mesages to Pushover device from the command line. Example: `make ; sudo make install ; pushpipe --title "make" -m "All done compiling."`', prog='pushpipe')
 	parser.add_argument('-u','--user',
 		action='store', dest='user', default=None,
 		help='User key instead of reading from settings. Requires --token.')
