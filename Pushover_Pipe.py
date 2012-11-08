@@ -57,6 +57,7 @@ def read_config(token, user, WORDS, DEV, TITLE, URL, UTITLE):
 		message(token, user, WORDS, DEV, TITLE, URL, UTITLE)
 
 def message(token, user, WORDS, DEV, TITLE, URL, UTITLE):
+
 	if DEV is None and URL is None:
 		conn.request("POST", "/1/messages.json",
 			urllib.parse.urlencode({
@@ -65,7 +66,8 @@ def message(token, user, WORDS, DEV, TITLE, URL, UTITLE):
 				"title": TITLE,
 				"message": WORDS,
 			}), { "Content-type": "application/x-www-form-urlencoded" })
-	if DEV is not None and URL is None:
+
+	elif DEV is not None and URL is None:
 		conn.request("POST", "/1/messages.json",
 			urllib.parse.urlencode({
 				"token": token,
@@ -74,17 +76,34 @@ def message(token, user, WORDS, DEV, TITLE, URL, UTITLE):
 				"message": WORDS,
 				"device": DEV,
 			}), { "Content-type": "application/x-www-form-urlencoded" })
-	if DEV is not None and URL is not None:
+
+	elif DEV is None and URL is not None:
 		conn.request("POST", "/1/messages.json",
 			urllib.parse.urlencode({
 				"token": token,
 				"user": user,
 				"title": TITLE,
-				"message": WORDS,
-				"device": DEV,
 				"url": URL,
 				"url_title": UTITLE,
+				"message": WORDS,
 			}), { "Content-type": "application/x-www-form-urlencoded" })
+
+	elif DEV is not None and URL is not None:
+		conn.request("POST", "/1/messages.json",
+			urllib.parse.urlencode({
+				"token": token,
+				"user": user,
+				"title": TITLE,
+				"url": URL,
+				"url_title": UTITLE,
+				"message": WORDS,
+				"device": DEV,
+			}), { "Content-type": "application/x-www-form-urlencoded" })
+
+	else:
+		print("Oops, you bwoke it.")
+		quit()
+
 	response=conn.getresponse()
 	if response.status is 200:
 		print("Everything went well.")
