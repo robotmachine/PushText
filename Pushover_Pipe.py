@@ -68,9 +68,9 @@ def message(token, user, WORDS, DEV, TITLE, URL, UTITLE, PRIORITY):
 		elif (PRIORITY == "Low" or "low" or "Lo" or "LO" or "lo" or "L" or "l"):
 			PRI2=-1
 		else:
-			print("What kind of priority is", PRIORITY, "?")
-			print("Priority must be either 'high' or 'low'.")
-			print("Sending with normal priority.")
+			print(textwrap.dedent("What kind of priority is ",PRIORITY,"?"))
+			print(textwrap.dedent("Priority must be either 'high' or 'low'."))
+			print(textwrap.dedent("Sending with normal priority."))
 			PRI2=0
 
 	if DEV is None and URL is None:
@@ -120,15 +120,15 @@ def message(token, user, WORDS, DEV, TITLE, URL, UTITLE, PRIORITY):
 			}), { "Content-type": "application/x-www-form-urlencoded" })
 
 	else:
-		print("Oops, you bwoke it.")
+		print(textwrap.dedent("Oops, you bwoke it."))
 		quit()
 
 	response=conn.getresponse()
 	if response.status is 200:
 		quit()
 	else:
-		print("Oops. You bwoke it.")
-		print("Pushover sez:", response.status, response.reason)
+		print(textwrap.dedent("Oops. You bwoke it."))
+		print(textwrap.dedent("Pushover sez:", response.status, response.reason))
 
 def set_config():
 	print(textwrap.dedent("""
