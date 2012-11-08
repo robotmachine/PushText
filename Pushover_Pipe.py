@@ -117,15 +117,15 @@ def message(token, user, WORDS, DEV, TITLE, URL, UTITLE, PRIORITY):
 			}), { "Content-type": "application/x-www-form-urlencoded" })
 
 	else:
-		print(textwrap.dedent("Oops, you bwoke it."))
+		print("Oops, you bwoke it.")
 		quit()
 
 	response=conn.getresponse()
 	if response.status is 200:
 		quit()
 	else:
-		print(textwrap.dedent("Oops. You bwoke it."))
-		print(textwrap.dedent("Pushover sez:", response.status, response.reason))
+		print("Oops. You bwoke it.")
+		print("Pushover sez:", response.status, response.reason)
 
 def set_config():
 	print(textwrap.dedent("""
