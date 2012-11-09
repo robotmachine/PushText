@@ -129,11 +129,16 @@ def message(token, user, WORDS, DEV, TITLE, URL, UTITLE, PRIORITY):
 
 def set_config():
 	print(textwrap.dedent("""
-	You will need to create an app 
+	Leave the API key blank to use
+	my app. I cannot see the messages
+	that you send. Otherwise, you will 
+	need to create your own app 
 	with Pushover and provide the token.
 	https://pushover.net/apps
 	"""))
 	token = input("API Token: ")
+	if (token == ""):
+		token = "VRC3JcAazvpi3KkilC8HFS6Kp0pI7X"
 	print(textwrap.dedent("""
 	Your user key is found on your 
 	Pushover.net Dashboard	
@@ -144,6 +149,7 @@ def set_config():
 			       'user': user}		
 	with open(settings, 'w') as configfile:
 		config.write(configfile)
-	message(token, user)
+	print("Settings saved!")
+	quit()
 
 main()
