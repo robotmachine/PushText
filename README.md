@@ -32,13 +32,13 @@ The above will result in this on your phone:
 You could also use it to let you know if something breaks.
 `$> some script ; if [ "$?" -ne "0" ]; then pushpipe -m "Oops, you bwoke it." ; fi`
 
-Send you a daily Todo list:
+Send your [Todo.txt](https://github.com/ginatrapani/todo.txt-cli) list daily:
 ```bash
 $> crontab -l | grep pushpipe
 30 10 * * * /usr/local/bin/pushpipe --title "Todo" -m "`/usr/local/bin/todo ls`" -d iphone
 ```
   
-And plenty of other things to do, too.  
+The possibilities are endless! (As long as the possibilities only include sending messages to your phone.)  
 
 RTFM:
 -----
