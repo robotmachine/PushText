@@ -25,15 +25,21 @@ Examples:
 ---------
 
 The simplest example would be to let you know when something finishes on your computer.
-`$> make ; make install ; pushpipe --title "make" --message "Done compiling."`
-and you'll get:
+`$> make ; make install ; pushpipe --title "make" --message "Done compiling."`  
+The above will result in this on your phone:  
 ![pushpipe example](http://mlkshk.com/r/L2TK.jpg "pushpipe example")
 
 You could also use it to let you know if something breaks.
 `$> some script ; if [ "$?" -ne "0" ]; then pushpipe -m "Oops, you bwoke it." ; fi`
 
-Or add to cron, or whatever. Use your imagination!
+Send you a daily Todo list:
+```bash
+$> crontab -l | grep pushpipe
+30 10 * * * /usr/local/bin/pushpipe --title "Todo" -m "`/usr/local/bin/todo ls`" -d iphone
+```
   
+And plenty of other things to do, too.  
+
 RTFM:
 -----
 ```
