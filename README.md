@@ -4,7 +4,7 @@ Pushover Pipe for Python
 Command line tool for sending messages using [Pushover](http://pushover.net).  
 Current Version: 0.01  
 
-Requires Python3, but could be converted down to python2 easily.  
+Requires Python3
 
 Installation:
 ------------
