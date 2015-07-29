@@ -30,24 +30,28 @@ $> crontab -l | grep pt
   
 The possibilities are endless! (As long as the possibilities only include sending messages to your phone.)  
 
-RTFM:
------
+#### Manual:  
 ```
-usage: pt [-h] [-u USER] [-t TOKEN] [-m WORDS] [-d DEV] [--title TITLE]  
-                [--url URL] [--urltitle UTITLE] [-p PRIORITY]  
-  
+usage: pt [-h] [-u USER] [-t TOKEN] [-m WORDS] [-d DEV] [--title TITLE]
+          [--url URL] [--urltitle UTITLE] [-p PRIORITY]
+
 PushText: Command line tool for http://pushover.net
-Example: `make ; sudo make install ; pt --title "make" -m "All done  
-compiling."`  
-  
-optional arguments:   
-  -h, --help            	show this help message and exit  
-  -u USER, --user USER  	User key instead of reading from settings. Requires --token.  
-  -t TOKEN, --token TOKEN 	Token key instead of reading from settings. Requires --user.  
-  -m WORDS, --message WORDS	 Message to send. Default is "Pushover Pipe"  
-  -d DEV, --device DEV  	Device name to receive message. Default sends to all devices.  
-  --title TITLE         	Title or application name. Default is Pushover_Pipe  
-  --url URL             	Optional URL to accompany your message.  
-  --urltitle UTITLE     	Title to go with your URL.  
-  -p PRIORITY, --priority	Priority level. "High" ignores quiet hours and "Low" sends as quiet. Default is normal.  
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -u USER, --user USER  User key instead of reading from settings. Requires
+                        --token.
+  -t TOKEN, --token TOKEN
+                        Token key instead of reading from settings. Requires
+                        --user.
+  -m WORDS, --message WORDS
+                        Message to send. Default is "PushText"
+  -d DEV, --device DEV  Device name to receive message. Default sends to all
+                        devices.
+  --title TITLE         Title or application name. Default is PushText
+  --url URL             Optional URL to accompany your message.
+  --urltitle UTITLE     Title to go with your URL.
+  -p PRIORITY, --priority PRIORITY
+                        Priority level. "High" ignores quiet hours and "Low"
+                        sends as quiet. Default is normal.
 ```
