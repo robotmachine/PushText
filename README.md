@@ -1,41 +1,31 @@
-Pushover Pipe for Python  
-========================  
+# PushText
+### Command line tool for [Pushover](http://pushover.net)  
+#### Installation:
+1. Download [the archive](https://github.com/robotmachine/PushText/tarball/master)  
+2. Run `chmod +x pt`
+3. Move `pt` to `/usr/local/bin` or somewhere else in `$PATH`
 
-Command line tool for sending messages using [Pushover](http://pushover.net).  
-Current Version: 0.01  
+#### Configuration:
 
-Requires Python3
-
-Installation:
-------------
-
-```bash
-$> cp pushpipe /usr/local/bin/
-```
-
-Configuration:
---------------
-
-If you run `pushpipe` without any setup it will ask for your API token and your user key.  
+If you run `pt` without any setup it will ask for your API token and your user key.  
 The user key is on your [user page](http://pushover.net).  
 You must create an application with Pushover in order to send messages.  
 See [Pushover Apps](https://pushover.net/apps) for more information.  
 
-Examples:
----------
+#### Examples:
 
 The simplest example would be to let you know when something finishes on your computer.
-`$> make ; make install ; pushpipe --title "make" --message "Done compiling."`  
+`$> make ; make install ; pt --title "make" --message "Done compiling."`  
 The above will result in this on your phone:  
-![pushpipe example](http://mlkshk.com/r/L2TK.jpg "pushpipe example")
+![pt example](http://mlkshk.com/r/L2TK.jpg "pt example")
 
 You could also use it to let you know if something breaks.
-`$> some script ; if [ "$?" -ne "0" ]; then pushpipe -m "Oops, you bwoke it." ; fi`
+`$> some script ; if [ "$?" -ne "0" ]; then pt -m "Oops, you bwoke it." ; fi`
 
 Send your [Todo.txt](https://github.com/ginatrapani/todo.txt-cli) list daily:
 ```bash
-$> crontab -l | grep pushpipe
-30 10 * * * /usr/local/bin/pushpipe --title "Todo" -m "`/usr/local/bin/todo ls`" -d iphone
+$> crontab -l | grep pt
+30 10 * * * /usr/local/bin/pt --title "Todo" -m "`/usr/local/bin/todo ls`" -d iphone
 ```
   
 The possibilities are endless! (As long as the possibilities only include sending messages to your phone.)  
@@ -43,11 +33,11 @@ The possibilities are endless! (As long as the possibilities only include sendin
 RTFM:
 -----
 ```
-usage: pushpipe [-h] [-u USER] [-t TOKEN] [-m WORDS] [-d DEV] [--title TITLE]  
+usage: pt [-h] [-u USER] [-t TOKEN] [-m WORDS] [-d DEV] [--title TITLE]  
                 [--url URL] [--urltitle UTITLE] [-p PRIORITY]  
   
-Pushover Pipe: Sends mesages to Pushover device from the command line.  
-Example: `make ; sudo make install ; pushpipe --title "make" -m "All done  
+PushText: Command line tool for http://pushover.net
+Example: `make ; sudo make install ; pt --title "make" -m "All done  
 compiling."`  
   
 optional arguments:   
