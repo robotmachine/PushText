@@ -32,26 +32,26 @@ The possibilities are endless! (As long as the possibilities only include sendin
 
 #### Manual:  
 ```
-usage: pt [-h] [-u USER] [-t TOKEN] [-m WORDS] [-d DEV] [--title TITLE]
-          [--url URL] [--urltitle UTITLE] [-p PRIORITY]
+usage: pt [-h] [-u USER_KEY] [-t TOKEN_KEY] [-p PRIORITY] [-m MESSAGE]
+          [-d DEVICE] [--title TITLE] [--url URL] [--urltitle URL_TITLE] [-v]
 
 PushText: Command line tool for http://pushover.net
 
 optional arguments:
   -h, --help            show this help message and exit
-  -u USER, --user USER  User key instead of reading from settings. Requires
-                        --token.
-  -t TOKEN, --token TOKEN
-                        Token key instead of reading from settings. Requires
-                        --user.
-  -m WORDS, --message WORDS
+  -u USER_KEY, --user-key USER_KEY
+                        User key instead of reading from settings.
+  -t TOKEN_KEY, --token-key TOKEN_KEY
+                        Token key instead of reading from settings.
+  -p PRIORITY, --priority PRIORITY
+                        Set priority of high or low. Default is normal.
+  -m MESSAGE, --message MESSAGE
                         Message to send. Default is "PushText"
-  -d DEV, --device DEV  Device name to receive message. Default sends to all
+  -d DEVICE, --device DEVICE
+                        Device name to receive message. Default sends to all
                         devices.
   --title TITLE         Title or application name. Default is PushText
   --url URL             Optional URL to accompany your message.
-  --urltitle UTITLE     Title to go with your URL.
-  -p PRIORITY, --priority PRIORITY
-                        Priority level. "High" ignores quiet hours and "Low"
-                        sends as quiet. Default is normal.
+  --urltitle URL_TITLE  Title to go with your URL.
+  -v, --version         Print version.
 ```
