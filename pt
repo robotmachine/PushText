@@ -60,7 +60,14 @@ def main():
 	parser.add_argument('--urltitle',
 		action='store', dest='URL_title', default='None',
 		help='Title to go with your URL.')
+	parser.add_argument('-v','--version',
+		action='store_true', dest='version',
+		help='Print version.')
 	args = parser.parse_args()
+	#
+	if args.version:
+		PrintVersion()
+		quit()
 	#
 	if args.user_key is None or args.token_key is None:
 		ReadConfig('test')
