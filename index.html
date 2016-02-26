@@ -1,0 +1,125 @@
+<!doctype html>
+<!-- The Time Machine GitHub pages theme was designed and developed by Jon Rohan, on Feb 7, 2012. -->
+<!-- Follow him for fun. http://twitter.com/jonrohan. Tail his code on https://github.com/jonrohan -->
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <link rel="stylesheet" href="stylesheets/stylesheet.css" media="screen">
+  <link rel="stylesheet" href="stylesheets/github-dark.css">
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+  <script type="text/javascript" src="javascripts/script.js"></script>
+
+  <title>PushText</title>
+  <meta name="description" content="CLI Tool for Pushover || Python 3">
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+</head>
+
+<body>
+
+  <div class="wrapper">
+    <header>
+      <h1 class="title">PushText</h1>
+    </header>
+    <div id="container">
+      <p class="tagline">CLI Tool for Pushover || Python 3</p>
+      <div id="main" role="main">
+        <div class="download-bar">
+        <div class="inner">
+          <a href="https://github.com/robotmachine/PushText/tarball/master" class="download-button tar"><span>Download</span></a>
+          <a href="https://github.com/robotmachine/PushText/zipball/master" class="download-button zip"><span>Download</span></a>
+          <a href="https://github.com/robotmachine/PushText" class="code">View PushText on GitHub</a>
+        </div>
+        <span class="blc"></span><span class="trc"></span>
+        </div>
+        <article class="markdown-body">
+          <h4>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation:</h4>
+
+<ol>
+<li>Download <a href="https://github.com/robotmachine/PushText/tarball/master">the archive</a><br>
+</li>
+<li>Run <code>chmod +x pt</code>
+</li>
+<li>Move <code>pt</code> to <code>/usr/local/bin</code> or somewhere else in <code>$PATH</code>
+</li>
+</ol>
+
+<h4>
+<a id="configuration" class="anchor" href="#configuration" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Configuration:</h4>
+
+<p>If you run <code>pt</code> without any setup it will ask for your API token and your user key.<br>
+The user key is on your <a href="http://pushover.net">user page</a>.<br>
+You must create an application with Pushover in order to send messages.<br>
+See <a href="https://pushover.net/apps">Pushover Apps</a> for more information.  </p>
+
+<h4>
+<a id="examples" class="anchor" href="#examples" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Examples:</h4>
+
+<p>The simplest example would be to let you know when something finishes on your computer.
+<code>$&gt; make ; make install ; pt --title "make" --message "Done compiling."</code><br>
+The above will result in this on your phone:<br>
+<img src="http://mlkshk.com/r/L2TK.jpg" alt="pt example" title="pt example"></p>
+
+<p>You could also use it to let you know if something breaks.
+<code>$&gt; some script ; if [ "$?" -ne "0" ]; then pt -m "Oops, you bwoke it." ; fi</code></p>
+
+<p>Send your <a href="https://github.com/ginatrapani/todo.txt-cli">Todo.txt</a> list daily:</p>
+
+<div class="highlight highlight-source-shell"><pre>$<span class="pl-k">&gt;</span> crontab -l <span class="pl-k">|</span> grep pt
+30 10 <span class="pl-k">*</span> <span class="pl-k">*</span> <span class="pl-k">*</span> /usr/local/bin/pt --title <span class="pl-s"><span class="pl-pds">"</span>Todo<span class="pl-pds">"</span></span> -m <span class="pl-s"><span class="pl-pds">"</span><span class="pl-s"><span class="pl-pds">`</span>/usr/local/bin/todo ls<span class="pl-pds">`</span></span><span class="pl-pds">"</span></span> -d iphone</pre></div>
+
+<p>The possibilities are endless! (As long as the possibilities only include sending messages to your phone.)  </p>
+
+<h4>
+<a id="manual" class="anchor" href="#manual" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Manual:</h4>
+
+<pre><code>usage: pt [-h] [-u USER_KEY] [-t TOKEN_KEY] [-p PRIORITY] [-m MESSAGE]
+          [-d DEVICE] [--title TITLE] [--url URL] [--urltitle URL_TITLE] [-v]
+
+PushText: Command line tool for http://pushover.net
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -u USER_KEY, --user-key USER_KEY
+                        User key instead of reading from settings.
+  -t TOKEN_KEY, --token-key TOKEN_KEY
+                        Token key instead of reading from settings.
+  -p PRIORITY, --priority PRIORITY
+                        Set priority of high or low. Default is normal.
+  -m MESSAGE, --message MESSAGE
+                        Message to send. Default is "PushText"
+  -d DEVICE, --device DEVICE
+                        Device name to receive message. Default sends to all
+                        devices.
+  --title TITLE         Title or application name. Default is PushText
+  --url URL             Optional URL to accompany your message.
+  --urltitle URL_TITLE  Title to go with your URL.
+  -v, --version         Print version.
+</code></pre>
+        </article>
+      </div>
+    </div>
+    <footer>
+      <div class="owner">
+      <p><a href="https://github.com/robotmachine" class="avatar"><img src="https://avatars1.githubusercontent.com/u/186000?v=3&amp;s=60" width="48" height="48"></a> <a href="https://github.com/robotmachine">robotmachine</a> maintains <a href="https://github.com/robotmachine/PushText">PushText</a></p>
+
+
+      </div>
+      <div class="creds">
+        <small>This page generated using <a href="https://pages.github.com/">GitHub Pages</a><br>theme by <a href="https://twitter.com/jonrohan/">Jon Rohan</a></small>
+      </div>
+    </footer>
+  </div>
+  <div class="current-section">
+    <a href="#top">Scroll to top</a>
+    <a href="https://github.com/robotmachine/PushText/tarball/master" class="tar">tar</a><a href="https://github.com/robotmachine/PushText/zipball/master" class="zip">zip</a><a href="" class="code">source code</a>
+    <p class="name"></p>
+  </div>
+
+  
+</body>
+</html>
