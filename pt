@@ -8,7 +8,7 @@
 #                                        
 # Command line tool for [Pushover](http://pushover.net)
 #
-ptVersion =       "1.3"
+ptVersion =       "2.0"
 ptHomePage =      "https://robotmachine.github.io/PushText"
 ptProjectSource = "https://github.com/robotmachine/PushText"
 ptAuthorName =    "Brian A. Carter"
