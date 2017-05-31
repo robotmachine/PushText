@@ -17,7 +17,7 @@ See [Pushover Apps](https://pushover.net/apps) for more information.
 The simplest example would be to let you know when something finishes on your computer.
 `$> make ; make install ; pt --title "make" --message "Done compiling."`  
 The above will result in this on your phone:  
-![pt example](http://mlkshk.com/r/L2TK.jpg "pt example")
+![pt example](http://mltshp.com/r/L2TK.jpg "pt example")
 
 You could also use it to let you know if something breaks.
 `$> some script ; if [ "$?" -ne "0" ]; then pt -m "Oops, you bwoke it." ; fi`
