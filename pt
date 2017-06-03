@@ -115,7 +115,7 @@ def main():
     #
     ## Device
     if args.device is not None:
-        if len(args.device) > 26:
+        if len(args.device) <= 25:
             body['device'] = str(args.device)
         else:
             print("Device names must be 25 or fewer characters.")
