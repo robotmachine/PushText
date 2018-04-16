@@ -9,11 +9,10 @@
 # Command line tool for [Pushover](http://pushover.net)
 #
 ptVersion =       "2.0"
-ptHomePage =      "https://robotmachine.github.io/PushText"
-ptProjectSource = "https://github.com/robotmachine/PushText"
+ptProjectSource = "https://gitlab.com/robotmachine/PushText"
 ptAuthorName =    "Brian A. Carter"
 ptAuthorEmail =   "robotmachine@protonmail.ch"
-ptCopyright =     "2013-2017"
+ptCopyright =     "2013-2018"
 # 
 ## License
 #
@@ -209,7 +208,7 @@ def queryTool(query):
 #
 ## Print Current Version Information
 def printVersion():
-    print("\nPushText v.{!s}\n\n(c){!s} {!s}\n{!s}\nProject Homepage: {!s}\nProject Source: {!s}\n\n".format(ptVersion, ptCopyright, ptAuthorName, ptAuthorEmail, ptHomePage, ptProjectSource))
+    print("\nPushText v.{!s}\n\n(c){!s} {!s}\n{!s}\nProject Home: {!s}\n\n".format(ptVersion, ptCopyright, ptAuthorName, ptAuthorEmail, ptProjectSource))
     quit()
 #
 ## Hey. It's main()
