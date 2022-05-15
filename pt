@@ -1,215 +1,215 @@
 #!/usr/bin/env python3
+import os
+import configparser
+import argparse
+import requests
 
-#  ____            _   _____         _   
-# |  _ \ _   _ ___| |_|_   _|____  _| |_ 
+#  ____            _   _____         _
+# |  _ \ _   _ ___| |_|_   _|____  _| |_
 # | |_) | | | / __| '_ \| |/ _ \ \/ / __|
-# |  __/| |_| \__ \ | | | |  __/>  <| |_ 
+# |  __/| |_| \__ \ | | | |  __/>  <| |_
 # |_|    \__,_|___/_| |_|_|\___/_/\_\\__|
-#                                        
+#
 # Command line tool for [Pushover](http://pushover.net)
 #
-ptVersion =       "2.0"
-ptProjectSource = "https://gitlab.com/robotmachine/PushText"
-ptAuthorName =    "Brian A. Carter"
-ptAuthorEmail =   "robotmachine@protonmail.ch"
-ptCopyright =     "2013-2018"
-# 
-## License
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-# 
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-# 
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+pushtext_version = "1.0.4"
+pushtext_homepage = "https://gitlab.com/robotmachine/PushText"
+pushtext_author = "Brian A. Carter"
+pushtext_email = "robotmachine@protonmail.ch"
+pushtext_copyright = "2013-2022"
+pushtext_configfile = os.path.expanduser("~/.ptrc")
 
-import os, sys, urllib, http.client, configparser, textwrap, argparse
-#
-## Import Requests
-#
-try:
-    import requests
-except:
-    print(" \nPushText requires requests\nYou can probably install it with:\n    #> pip install requests\n ")
-#
-#
+
 def main():
-    parser = argparse.ArgumentParser(description='PushText: Command line tool for http://pushover.net', prog='pt')
-    parser.add_argument('-u','--user-key',
-        action='store', dest='user_key', default=None,
-        help='User key instead of reading from settings.')
-    parser.add_argument('-t','--token-key',
-        action='store', dest='token_key', default=None,
-        help='Token key instead of reading from settings.')
-    parser.add_argument('-p', '--priority',
-        action='store', dest='priority', default=None,
-        help='Set priority of high or low. Default is normal.')
-    parser.add_argument('-m','--message',
-        action='store', dest='message', default='PushText',
-        help='Message to send. Default is "PushText"')
-    parser.add_argument('-d','--device',
-        action='store', dest='device', default=None,
-        help='Device name to receive message. Default sends to all devices.')
-    parser.add_argument('--title',
-        action='store', dest='title', default='PushText',
-        help='Title or application name. Default is PushText')
-    parser.add_argument('--url',
-        action='store', dest='URL', default=None,
-        help='Optional URL to accompany your message.')
-    parser.add_argument('--urltitle',
-        action='store', dest='URL_title', default='None',
-        help='Title to go with your URL.')
-    parser.add_argument('-v','--version',
-        action='store_true', dest='version',
-        help='Print version.')
+    parser = argparse.ArgumentParser(
+        description="PushText: Command line tool for http://pushover.net", prog="pt"
+    )
+    parser.add_argument(
+        "-u",
+        "--user_key",
+        action="store",
+        dest="user_key",
+        default=None,
+        help="User key instead of reading from settings.",
+    )
+    parser.add_argument(
+        "-t",
+        "--api_token",
+        action="store",
+        dest="api_token",
+        default=None,
+        help="Token key instead of reading from settings.",
+    )
+    parser.add_argument(
+        "-p",
+        "--priority",
+        action="store",
+        dest="priority",
+        default=None,
+        help="Set priority of high or low. Default is normal.",
+    )
+    parser.add_argument(
+        "-m",
+        "--message",
+        action="store",
+        dest="message",
+        default="PushText",
+        help='Message to send. Default is "PushText"',
+    )
+    parser.add_argument(
+        "-d",
+        "--device",
+        action="store",
+        dest="device",
+        default=None,
+        help="Device name to receive message. Default sends to all devices.",
+    )
+    parser.add_argument(
+        "--title",
+        action="store",
+        dest="title",
+        default="PushText",
+        help="Title or application name. Default is PushText",
+    )
+    parser.add_argument(
+        "--url",
+        action="store",
+        dest="URL",
+        default=None,
+        help="Optional URL to accompany your message.",
+    )
+    parser.add_argument(
+        "--urltitle",
+        action="store",
+        dest="URL_title",
+        default="None",
+        help="Title to go with your URL.",
+    )
+    parser.add_argument(
+        "-v", "--version", action="store_true", dest="version", help="Print version."
+    )
     args = parser.parse_args()
-    #
-    ## Version
-    if args.version:
-        printVersion()
-    #
-    ## User key
-    if args.user_key is not None:
-        if len(args.user_key) != 30:
-            print("User keys must be exactly 30 characters.")
-            quit()
-        else:
-            userKey = str(args.user_key)
-    else:
-        userKey = readConfig('userKey')
-    #
-    ## Token
-    if args.token_key is not None:
-        if len(args.token_key) != 30:
-            print("Tokens must be exactly 30 characters.")
-            quit()
-        else:
-            token = str(args.token_key)
-    else:
-        token = readConfig('token')
-    #
-    # Build header dictionary
-    body = {
-           'user': userKey,
-           'token': token,
-           'title': str(args.title),
-           'message': str(args.message)
-           }
-    #
-    # Priority
-    if args.priority is None:
-        body['priority'] = 0
-    elif (args.priority.lower() in ["high","hi","h"]):
-        body['priority'] = 1
-    elif (args.priority.lower() in ["low","lo","l"]):
-        body['priority'] = -1
-    else:
-        body['priority'] = 0
-    #
-    ## Device
-    if args.device is not None:
-        if len(args.device) <= 25:
-            body['device'] = str(args.device)
-        else:
-            print("Device names must be 25 or fewer characters.")
-    #
-    ## URL
-    if args.URL is not None:
-        body['url'] = str(args.URL)
-        if args.URL_title is None:
-            body['url_title'] = "PushText URL"
-        else:
-            body['url_title'] = str(args.URL_title)
-    #
-    ## Send Message
-    sendMessage(body)
-#
-## Send the message!
-def sendMessage(body):
-    ## Base URL
-    baseUrl = "api.pushover.net"
-    sendUrl = "https://{!s}/1/messages.json".format(baseUrl)
-    sendMessage = requests.post(sendUrl, body)
-#
-## Read config
-def readConfig(needful):
-    config = configparser.ConfigParser()
-    global ConfigFile
-    ConfigFile = os.path.expanduser("~/.ptrc")
-    if not os.path.exists(ConfigFile):
-        setConfig()
-    #
-    if needful == 'userKey':
-        config.read(ConfigFile)
-        result = config['PushText']['user']
-    elif needful == 'token':
-        config.read(ConfigFile)
-        result = config['PushText']['token']
-    else:
-        print("How did you even do that?")
-        quit()
-    return result
-#
-## Setup Config
-def setConfig():
-    print(textwrap.dedent("""
-    No PushText config file found... running setup.
-    
-    
-    You will need to create your own app 
-    with Pushover and provide the token.
-    https://pushover.net/apps
-    """))
-    token = queryTool("Application Token: ")
-    if (token == ""):
-        print("Token is required.")
-        quit()
-    elif len(token) != 30:
-        print("Token must be exactly 30 characters long.")
-        quit()
-    print(textwrap.dedent("""
-    Your user key is found on your 
-    Pushover.net Dashboard    
-    https://pushover.net
-    """))
-    user = queryTool("User Key: ")
-    if (user == ""):
-        print("User key is required.")
-        quit()
-    elif len(user) != 30:
-        print("User key must be exactly 30 characters long.")
-        quit()
-    config = configparser.ConfigParser()
-    config ['PushText'] = {'token': token,
-                   'user': user}        
-    with open(ConfigFile, 'w') as configfile:
-        config.write(configfile)
-    print("\nSettings saved!\n")
-    quit()
-#
-## Query Tool
-def queryTool(query):
-    try:
-        result = input(query)
-        return result
-    except KeyboardInterrupt:
-        print("\nUser Exited")
-        quit()
-    except:
-        print("\nSyntax Error")
-        quit()
 
-#
-## Print Current Version Information
-def printVersion():
-    print("\nPushText v.{!s}\n\n(c){!s} {!s}\n{!s}\nProject Home: {!s}\n\n".format(ptVersion, ptCopyright, ptAuthorName, ptAuthorEmail, ptProjectSource))
-    quit()
-#
-## Hey. It's main()
-main()
+    if args.version:
+        quit(
+            f"\nPushtext v.{pushtext_version}\n \
+            (c){pushtext_copyright} {pushtext_author}\n \
+            {pushtext_email}\nProject Home: {pushtext_homepage}"
+        )
+
+    body = {}
+    if args.user_key is not None:
+        if length_tool("user_key", args.user_key):
+            body["user"] = args.user_key
+    else:
+        body["user"] = read_config("user_key")
+
+    if args.api_token is not None:
+        if length_tool("api_token", args.api_token):
+            body["token"] = str(args.api_token)
+    else:
+        body["token"] = read_config("api_token")
+
+    if args.priority is None:
+        body["priority"] = 0
+    elif args.priority.lower() in ["high", "hi", "h"]:
+        body["priority"] = 1
+    elif args.priority.lower() in ["low", "lo", "l"]:
+        body["priority"] = -1
+    else:
+        body["priority"] = 0
+
+    if args.device is not None:
+        if length_tool("device", args.device):
+            body["device"] = str(args.device)
+
+    if length_tool("title", args.title):
+        body["title"] = str(args.title)
+
+    if length_tool("message", args.message):
+        body["message"] = str(args.message)
+
+    if args.URL is not None:
+        if length_tool("url", str(args.URL)):
+            body["url"] = str(args.URL)
+        if args.URL_title is not None:
+            if length_tool("url_title", str(args.URL_title)):
+                body["url_title"] = str(args.URL_title)
+        else:
+            body["url_title"] = "PushText URL"
+
+    send_message(body)
+
+
+def send_message(body):
+    base_url = "api.pushover.net"
+    send_url = f"https://{base_url}/1/messages.json"
+    try:
+        request = requests.post(send_url, body)
+        if int(str(request.status_code)[:1]) != 2:
+            quit(f"{request.status_code}: {request.reason}\n{request.content}")
+        else:
+            return True
+    except requests.exceptions.ConnectionError as e:
+        quit(e)
+
+
+def read_config(needful):
+    config = configparser.ConfigParser()
+    if not os.path.exists(pushtext_configfile):
+        set_config()
+    if needful == "user_key":
+        config.read(pushtext_configfile)
+        return config["PushText"]["user"]
+    elif needful == "api_token":
+        config.read(pushtext_configfile)
+        return config["PushText"]["token"]
+    else:
+        quit("How did you even do that?")
+
+
+def set_config():
+    print("\nHint: Create an app here -> https://pushover.net/apps\n")
+    api_token = query_tool("api_token", "Application Token: ")
+
+    print("\nHint: User Key will be shown after logging in -> https://pushover.net\n")
+    user_key = query_tool("user_key", "User Key: ")
+
+    config = configparser.ConfigParser()
+    config["PushText"] = {"token": api_token, "user": user_key}
+    with open(pushtext_configfile, "w") as configfile:
+        config.write(configfile)
+    quit("\nSettings saved!\n")
+
+
+def query_tool(key, prompt):
+    try:
+        user_input = input(prompt)
+        if length_tool(key, user_input):
+            return user_input
+    except KeyboardInterrupt:
+        quit("\n\nUser Exited")
+    except Exception as e:
+        quit(e)
+
+
+def length_tool(key, value):
+    lengths = {
+        "message": 1024,
+        "title": 250,
+        "url": 512,
+        "url_title": 100,
+        "api_token": 30,
+        "user_key": 30,
+        "device": 25,
+    }
+    if value == "":
+        quit(f"{key.title()} cannot be empty")
+    elif value.__len__() >= lengths[key.lower()]:
+        quit(f"{key.title()} must under {lengths[key.lower()]} characters")
+    else:
+        return True
+
+
+if __name__ == "__main__":
+    main()
