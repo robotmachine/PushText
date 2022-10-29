@@ -2,8 +2,8 @@
 ### Command line tool for [Pushover](http://pushover.net)  
 #### Installation:
 1. Download [the archive](https://github.com/robotmachine/PushText/tarball/master)  
-2. Run `chmod +x pt`
-3. Move `pt` to `/usr/local/bin` or somewhere else in `$PATH`
+2. Run `chmod +x pt.py`
+3. Move `pt.py` to `/usr/local/bin` or somewhere else in `$PATH`
 
 #### Configuration:
 
