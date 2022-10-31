@@ -12,12 +12,14 @@ import requests
 #
 # Command line tool for [Pushover](http://pushover.net)
 #
-pushtext_version = "1.0.5"
-pushtext_homepage = "https://gitlab.com/robotmachine/PushText"
-pushtext_author = "Bee Carter"
-pushtext_email = "robotmachine@pm.me"
-pushtext_copyright = "2013-2022"
-pushtext_configfile = os.path.expanduser("~/.config/pushtext/settings.json")
+pushtext_meta = {
+    'version': "1.0.5",
+    'homepage': "https://gitlab.com/robotmachine/PushText",
+    'author': "Bee Carter",
+    'email': "robotmachine@pm.me",
+    'copyright': "2013-2022",
+    'configfile': os.path.expanduser("~/.config/pushtext/settings.json")
+}
 
 
 def main():
@@ -27,10 +29,10 @@ def main():
     if args.version:
         print(
             f"""\n
-        Pushtext v.{pushtext_version}
-        (c){pushtext_copyright} {pushtext_author}
-        {pushtext_email}\n
-        Project Home: {pushtext_homepage}\n
+        Pushtext v.{pushtext_meta['version']}
+        (c){pushtext_meta['copyright']} {pushtext_meta['author']}
+        {pushtext_meta['email']}\n
+        Project Home: {pushtext_meta['homepage']}\n
         """
         )
         quit()
@@ -93,10 +95,10 @@ def send_message(body):
 
 
 def read_config(needful):
-    if not os.path.exists(pushtext_configfile):
+    if not os.path.exists(pushtext_meta['configfile']):
         set_config()
     else:
-        with open(pushtext_configfile, "r", encoding="utf-8") as config_file:
+        with open(pushtext_meta['configfile'], "r", encoding="utf-8") as config_file:
             config = json.load(config_file)
     try:
         return config[needful]
@@ -113,7 +115,7 @@ def set_config():
     print("\nHint: User Key will be shown after logging in -> https://pushover.net\n")
     user_config["user_key"] = get_query("user_key", "User Key: ")
 
-    with open(pushtext_configfile, "w") as config_file:
+    with open(pushtext_meta['configfile'], "w") as config_file:
         json.dump(user_config, config_file, indent=4, sort_keys=True)
 
     print("\nSettings saved!\n")
