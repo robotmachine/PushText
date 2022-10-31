@@ -37,13 +37,13 @@ def main():
 
     body = {}
     if args.user_key is not None:
-        if length_tool("user_key", args.user_key):
+        if length_chk("user_key", args.user_key):
             body["user"] = args.user_key
     else:
         body["user"] = read_config("user_key")
 
     if args.api_token is not None:
-        if length_tool("api_token", args.api_token):
+        if length_chk("api_token", args.api_token):
             body["token"] = str(args.api_token)
     else:
         body["token"] = read_config("api_token")
@@ -58,20 +58,20 @@ def main():
         body["priority"] = 0
 
     if args.device is not None:
-        if length_tool("device", args.device):
+        if length_chk("device", args.device):
             body["device"] = str(args.device)
 
-    if length_tool("title", args.title):
+    if length_chk("title", args.title):
         body["title"] = str(args.title)
 
-    if length_tool("message", args.message):
+    if length_chk("message", args.message):
         body["message"] = str(args.message)
 
     if args.URL is not None:
-        if length_tool("url", str(args.URL)):
+        if length_chk("url", str(args.URL)):
             body["url"] = str(args.URL)
         if args.URL_title is not None:
-            if length_tool("url_title", str(args.URL_title)):
+            if length_chk("url_title", str(args.URL_title)):
                 body["url_title"] = str(args.URL_title)
         else:
             body["url_title"] = "PushText URL"
@@ -108,10 +108,10 @@ def set_config():
     user_config = {}
 
     print("\nHint: Create an app here -> https://pushover.net/apps\n")
-    user_config["api_token"] = query_tool("api_token", "Application Token: ")
+    user_config["api_token"] = get_query("api_token", "Application Token: ")
 
     print("\nHint: User Key will be shown after logging in -> https://pushover.net\n")
-    user_config["user_key"] = query_tool("user_key", "User Key: ")
+    user_config["user_key"] = get_query("user_key", "User Key: ")
 
     with open(pushtext_configfile, "w") as config_file:
         json.dump(user_config, config_file, indent=4, sort_keys=True)
@@ -120,10 +120,10 @@ def set_config():
     quit()
 
 
-def query_tool(key, prompt):
+def get_query(key, prompt):
     try:
         user_input = input(prompt)
-        if length_tool(key, user_input):
+        if length_chk(key, user_input):
             return user_input
     except KeyboardInterrupt:
         quit("\n\nUser Exited")
@@ -131,7 +131,7 @@ def query_tool(key, prompt):
         quit(e)
 
 
-def length_tool(key, value):
+def length_chk(key, value):
     lengths = {
         "message": 1024,
         "title": 250,
