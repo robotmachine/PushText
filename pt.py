@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import os
-import configparser
+import json
 import argparse
 import requests
 
@@ -12,12 +12,12 @@ import requests
 #
 # Command line tool for [Pushover](http://pushover.net)
 #
-pushtext_version = "1.0.4"
+pushtext_version = "1.0.5"
 pushtext_homepage = "https://gitlab.com/robotmachine/PushText"
 pushtext_author = "Bee Carter"
 pushtext_email = "robotmachine@pm.me"
 pushtext_copyright = "2013-2022"
-pushtext_configfile = os.path.expanduser("~/.config/pushtext/settings.conf")
+pushtext_configfile = os.path.expanduser("~/.config/pushtext/settings.json")
 
 
 def main():
@@ -89,31 +89,31 @@ def send_message(body):
 
 
 def read_config(needful):
-    config = configparser.ConfigParser()
     if not os.path.exists(pushtext_configfile):
         set_config()
-    if needful == "user_key":
-        config.read(pushtext_configfile)
-        return config["PushText"]["user"]
-    elif needful == "api_token":
-        config.read(pushtext_configfile)
-        return config["PushText"]["token"]
     else:
-        quit("How did you even do that?")
+        with open(pushtext_configfile, "r", encoding="utf-8") as config_file:
+            config = json.load(config_file)
+    try:
+        return config[needful]
+    except KeyError:
+        set_config()
 
 
 def set_config():
+    user_config = {}
+
     print("\nHint: Create an app here -> https://pushover.net/apps\n")
-    api_token = query_tool("api_token", "Application Token: ")
+    user_config["api_token"] = query_tool("api_token", "Application Token: ")
 
     print("\nHint: User Key will be shown after logging in -> https://pushover.net\n")
-    user_key = query_tool("user_key", "User Key: ")
+    user_config["user_key"] = query_tool("user_key", "User Key: ")
 
-    config = configparser.ConfigParser()
-    config["PushText"] = {"token": api_token, "user": user_key}
-    with open(pushtext_configfile, "w") as configfile:
-        config.write(configfile)
-    quit("\nSettings saved!\n")
+    with open(pushtext_configfile, "w") as config_file:
+        json.dump(user_config, config_file, indent=4, sort_keys=True)
+
+    print("\nSettings saved!\n")
+    quit()
 
 
 def query_tool(key, prompt):
