@@ -15,7 +15,7 @@ import requests
 pushtext_version = "1.0.4"
 pushtext_homepage = "https://gitlab.com/robotmachine/PushText"
 pushtext_author = "Brian A. Carter"
-pushtext_email = "robotmachine@protonmail.ch"
+pushtext_email = "robotmachine@pm.me"
 pushtext_copyright = "2013-2022"
 pushtext_configfile = os.path.expanduser("~/.ptrc")
 
