@@ -25,11 +25,15 @@ def main():
     args = parser.parse_args()
 
     if args.version:
-        quit(
-            f"\nPushtext v.{pushtext_version}\n \
-            (c){pushtext_copyright} {pushtext_author}\n \
-            {pushtext_email}\nProject Home: {pushtext_homepage}"
+        print(
+            f"""\n
+        Pushtext v.{pushtext_version}
+        (c){pushtext_copyright} {pushtext_author}
+        {pushtext_email}\n
+        Project Home: {pushtext_homepage}\n
+        """
         )
+        quit()
 
     body = {}
     if args.user_key is not None:
