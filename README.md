@@ -2,12 +2,12 @@
 ### Command line tool for [Pushover](http://pushover.net)  
 #### Installation:
 1. Download [the archive](https://github.com/robotmachine/PushText/tarball/master)  
-2. Run `chmod +x pt.py`
-3. Move `pt.py` to `/usr/local/bin` or somewhere else in `$PATH`
+2. Run `chmod +x push_text.py`
+3. Move `push_text.py` to `/usr/local/bin` or somewhere else in `$PATH`
 
 #### Configuration:
 
-If you run `pt` without any setup it will ask for your API token and your user key.  
+If you run `push_text.py` without any setup it will ask for your API token and your user key.  
 The user key is on your [user page](http://pushover.net).  
 You must create an application with Pushover in order to send messages.  
 See [Pushover Apps](https://pushover.net/apps) for more information.  
@@ -15,24 +15,24 @@ See [Pushover Apps](https://pushover.net/apps) for more information.
 #### Examples:
 
 The simplest example would be to let you know when something finishes on your computer.
-`$> make ; make install ; pt --title "make" --message "Done compiling."`  
+`$> make ; make install ; push_text.py --title "make" --message "Done compiling."`  
 The above will result in this on your phone:  
 ![pt example](http://mltshp.com/r/L2TK.jpg "pt example")
 
 You could also use it to let you know if something breaks.
-`$> some script ; if [ "$?" -ne "0" ]; then pt -m "Oops, you bwoke it." ; fi`
+`$> some script ; if [ "$?" -ne "0" ]; then push_text.py -m "Oops, you bwoke it." ; fi`
 
 Send your [Todo.txt](https://github.com/ginatrapani/todo.txt-cli) list daily:
 ```bash
-$> crontab -l | grep pt
-30 10 * * * /usr/local/bin/pt --title "Todo" -m "`/usr/local/bin/todo ls`" -d iphone
+$> crontab -l | grep push_text.py
+30 10 * * * /usr/local/bin/push_text.py --title "Todo" -m "`/usr/local/bin/todo ls`" -d iphone
 ```
   
 The possibilities are endless! (As long as the possibilities only include sending messages to your phone.)  
 
 #### Manual:  
 ```
-usage: pt [-h] [-u USER_KEY] [-t TOKEN_KEY] [-p PRIORITY] [-m MESSAGE]
+usage: push_text.py [-h] [-u USER_KEY] [-t TOKEN_KEY] [-p PRIORITY] [-m MESSAGE]
           [-d DEVICE] [--title TITLE] [--url URL] [--urltitle URL_TITLE] [-v]
 
 PushText: Command line tool for http://pushover.net

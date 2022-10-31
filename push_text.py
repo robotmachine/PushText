@@ -151,7 +151,7 @@ def length_tool(key, value):
 
 def setup_argparse():
     parser = argparse.ArgumentParser(
-        description="PushText: Command line tool for http://pushover.net", prog="pt"
+        description="PushText: Command line tool for http://pushover.net", prog="push_text.py"
     )
     parser.add_argument(
         "-u",
