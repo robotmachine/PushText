@@ -17,7 +17,7 @@ pushtext_homepage = "https://gitlab.com/robotmachine/PushText"
 pushtext_author = "Brian A. Carter"
 pushtext_email = "robotmachine@pm.me"
 pushtext_copyright = "2013-2022"
-pushtext_configfile = os.path.expanduser("~/.ptrc")
+pushtext_configfile = os.path.expanduser("~/.config/pushtext/settings.conf")
 
 
 def main():
