@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import os
-import configparser
+import json
 import argparse
 import requests
 
@@ -12,82 +12,16 @@ import requests
 #
 # Command line tool for [Pushover](http://pushover.net)
 #
-pushtext_version = "1.0.4"
+pushtext_version = "1.0.5"
 pushtext_homepage = "https://gitlab.com/robotmachine/PushText"
-pushtext_author = "Brian A. Carter"
-pushtext_email = "robotmachine@protonmail.ch"
+pushtext_author = "Bee Carter"
+pushtext_email = "robotmachine@pm.me"
 pushtext_copyright = "2013-2022"
-pushtext_configfile = os.path.expanduser("~/.ptrc")
+pushtext_configfile = os.path.expanduser("~/.config/pushtext/settings.json")
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="PushText: Command line tool for http://pushover.net", prog="pt"
-    )
-    parser.add_argument(
-        "-u",
-        "--user_key",
-        action="store",
-        dest="user_key",
-        default=None,
-        help="User key instead of reading from settings.",
-    )
-    parser.add_argument(
-        "-t",
-        "--api_token",
-        action="store",
-        dest="api_token",
-        default=None,
-        help="Token key instead of reading from settings.",
-    )
-    parser.add_argument(
-        "-p",
-        "--priority",
-        action="store",
-        dest="priority",
-        default=None,
-        help="Set priority of high or low. Default is normal.",
-    )
-    parser.add_argument(
-        "-m",
-        "--message",
-        action="store",
-        dest="message",
-        default="PushText",
-        help='Message to send. Default is "PushText"',
-    )
-    parser.add_argument(
-        "-d",
-        "--device",
-        action="store",
-        dest="device",
-        default=None,
-        help="Device name to receive message. Default sends to all devices.",
-    )
-    parser.add_argument(
-        "--title",
-        action="store",
-        dest="title",
-        default="PushText",
-        help="Title or application name. Default is PushText",
-    )
-    parser.add_argument(
-        "--url",
-        action="store",
-        dest="URL",
-        default=None,
-        help="Optional URL to accompany your message.",
-    )
-    parser.add_argument(
-        "--urltitle",
-        action="store",
-        dest="URL_title",
-        default="None",
-        help="Title to go with your URL.",
-    )
-    parser.add_argument(
-        "-v", "--version", action="store_true", dest="version", help="Print version."
-    )
+    parser = setup_argparse()
     args = parser.parse_args()
 
     if args.version:
@@ -155,31 +89,31 @@ def send_message(body):
 
 
 def read_config(needful):
-    config = configparser.ConfigParser()
     if not os.path.exists(pushtext_configfile):
         set_config()
-    if needful == "user_key":
-        config.read(pushtext_configfile)
-        return config["PushText"]["user"]
-    elif needful == "api_token":
-        config.read(pushtext_configfile)
-        return config["PushText"]["token"]
     else:
-        quit("How did you even do that?")
+        with open(pushtext_configfile, "r", encoding="utf-8") as config_file:
+            config = json.load(config_file)
+    try:
+        return config[needful]
+    except KeyError:
+        set_config()
 
 
 def set_config():
+    user_config = {}
+
     print("\nHint: Create an app here -> https://pushover.net/apps\n")
-    api_token = query_tool("api_token", "Application Token: ")
+    user_config["api_token"] = query_tool("api_token", "Application Token: ")
 
     print("\nHint: User Key will be shown after logging in -> https://pushover.net\n")
-    user_key = query_tool("user_key", "User Key: ")
+    user_config["user_key"] = query_tool("user_key", "User Key: ")
 
-    config = configparser.ConfigParser()
-    config["PushText"] = {"token": api_token, "user": user_key}
-    with open(pushtext_configfile, "w") as configfile:
-        config.write(configfile)
-    quit("\nSettings saved!\n")
+    with open(pushtext_configfile, "w") as config_file:
+        json.dump(user_config, config_file, indent=4, sort_keys=True)
+
+    print("\nSettings saved!\n")
+    quit()
 
 
 def query_tool(key, prompt):
@@ -205,10 +139,81 @@ def length_tool(key, value):
     }
     if value == "":
         quit(f"{key.title()} cannot be empty")
-    elif value.__len__() >= lengths[key.lower()]:
+    elif value.__len__() > lengths[key.lower()]:
         quit(f"{key.title()} must under {lengths[key.lower()]} characters")
     else:
         return True
+
+
+def setup_argparse():
+    parser = argparse.ArgumentParser(
+        description="PushText: Command line tool for http://pushover.net", prog="pt"
+    )
+    parser.add_argument(
+        "-u",
+        "--user_key",
+        action="store",
+        dest="user_key",
+        default=None,
+        help="User key instead of reading from settings.",
+    )
+    parser.add_argument(
+        "-t",
+        "--api_token",
+        action="store",
+        dest="api_token",
+        default=None,
+        help="Token key instead of reading from settings.",
+    )
+    parser.add_argument(
+        "-p",
+        "--priority",
+        action="store",
+        dest="priority",
+        default=None,
+        help="Set priority of high or low. Default is normal.",
+    )
+    parser.add_argument(
+        "-m",
+        "--message",
+        action="store",
+        dest="message",
+        default="PushText",
+        help='Message to send. Default is "PushText"',
+    )
+    parser.add_argument(
+        "-d",
+        "--device",
+        action="store",
+        dest="device",
+        default=None,
+        help="Device name to receive message. Default sends to all devices.",
+    )
+    parser.add_argument(
+        "--title",
+        action="store",
+        dest="title",
+        default="PushText",
+        help="Title or application name. Default is PushText",
+    )
+    parser.add_argument(
+        "--url",
+        action="store",
+        dest="URL",
+        default=None,
+        help="Optional URL to accompany your message.",
+    )
+    parser.add_argument(
+        "--urltitle",
+        action="store",
+        dest="URL_title",
+        default="None",
+        help="Title to go with your URL.",
+    )
+    parser.add_argument(
+        "-v", "--version", action="store_true", dest="version", help="Print version."
+    )
+    return parser
 
 
 if __name__ == "__main__":
