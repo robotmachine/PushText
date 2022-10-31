@@ -139,7 +139,7 @@ def length_tool(key, value):
     }
     if value == "":
         quit(f"{key.title()} cannot be empty")
-    elif value.__len__() >= lengths[key.lower()]:
+    elif value.__len__() > lengths[key.lower()]:
         quit(f"{key.title()} must under {lengths[key.lower()]} characters")
     else:
         return True
