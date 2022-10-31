@@ -21,73 +21,7 @@ pushtext_configfile = os.path.expanduser("~/.ptrc")
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="PushText: Command line tool for http://pushover.net", prog="pt"
-    )
-    parser.add_argument(
-        "-u",
-        "--user_key",
-        action="store",
-        dest="user_key",
-        default=None,
-        help="User key instead of reading from settings.",
-    )
-    parser.add_argument(
-        "-t",
-        "--api_token",
-        action="store",
-        dest="api_token",
-        default=None,
-        help="Token key instead of reading from settings.",
-    )
-    parser.add_argument(
-        "-p",
-        "--priority",
-        action="store",
-        dest="priority",
-        default=None,
-        help="Set priority of high or low. Default is normal.",
-    )
-    parser.add_argument(
-        "-m",
-        "--message",
-        action="store",
-        dest="message",
-        default="PushText",
-        help='Message to send. Default is "PushText"',
-    )
-    parser.add_argument(
-        "-d",
-        "--device",
-        action="store",
-        dest="device",
-        default=None,
-        help="Device name to receive message. Default sends to all devices.",
-    )
-    parser.add_argument(
-        "--title",
-        action="store",
-        dest="title",
-        default="PushText",
-        help="Title or application name. Default is PushText",
-    )
-    parser.add_argument(
-        "--url",
-        action="store",
-        dest="URL",
-        default=None,
-        help="Optional URL to accompany your message.",
-    )
-    parser.add_argument(
-        "--urltitle",
-        action="store",
-        dest="URL_title",
-        default="None",
-        help="Title to go with your URL.",
-    )
-    parser.add_argument(
-        "-v", "--version", action="store_true", dest="version", help="Print version."
-    )
+    parser = setup_argparse()
     args = parser.parse_args()
 
     if args.version:
@@ -209,6 +143,77 @@ def length_tool(key, value):
         quit(f"{key.title()} must under {lengths[key.lower()]} characters")
     else:
         return True
+
+
+def setup_argparse():
+    parser = argparse.ArgumentParser(
+        description="PushText: Command line tool for http://pushover.net", prog="pt"
+    )
+    parser.add_argument(
+        "-u",
+        "--user_key",
+        action="store",
+        dest="user_key",
+        default=None,
+        help="User key instead of reading from settings.",
+    )
+    parser.add_argument(
+        "-t",
+        "--api_token",
+        action="store",
+        dest="api_token",
+        default=None,
+        help="Token key instead of reading from settings.",
+    )
+    parser.add_argument(
+        "-p",
+        "--priority",
+        action="store",
+        dest="priority",
+        default=None,
+        help="Set priority of high or low. Default is normal.",
+    )
+    parser.add_argument(
+        "-m",
+        "--message",
+        action="store",
+        dest="message",
+        default="PushText",
+        help='Message to send. Default is "PushText"',
+    )
+    parser.add_argument(
+        "-d",
+        "--device",
+        action="store",
+        dest="device",
+        default=None,
+        help="Device name to receive message. Default sends to all devices.",
+    )
+    parser.add_argument(
+        "--title",
+        action="store",
+        dest="title",
+        default="PushText",
+        help="Title or application name. Default is PushText",
+    )
+    parser.add_argument(
+        "--url",
+        action="store",
+        dest="URL",
+        default=None,
+        help="Optional URL to accompany your message.",
+    )
+    parser.add_argument(
+        "--urltitle",
+        action="store",
+        dest="URL_title",
+        default="None",
+        help="Title to go with your URL.",
+    )
+    parser.add_argument(
+        "-v", "--version", action="store_true", dest="version", help="Print version."
+    )
+    return parser
 
 
 if __name__ == "__main__":
