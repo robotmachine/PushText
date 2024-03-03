@@ -12,7 +12,7 @@ import requests
 #
 # Command line tool for [Pushover](http://pushover.net)
 #
-pushtext_meta = {
+pushtext_meta: dict = {
     'version': "1.0.5",
     'homepage': "https://gitlab.com/robotmachine/PushText",
     'author': "Bee Carter",
@@ -22,71 +22,71 @@ pushtext_meta = {
 }
 
 
-def main():
-    parser = setup_argparse()
-    args = parser.parse_args()
+def main() -> None:
+    parser: argparse = setup_argparse()
+    args: argparse = parser.parse_args()
 
     if args.version:
         print(
             f"""\n
-        Pushtext v.{pushtext_meta['version']}
-        (c){pushtext_meta['copyright']} {pushtext_meta['author']}
-        {pushtext_meta['email']}\n
-        Project Home: {pushtext_meta['homepage']}\n
-        """
+            Pushtext v.{pushtext_meta['version']}
+            (c){pushtext_meta['copyright']} {pushtext_meta['author']}
+            {pushtext_meta['email']}\n
+            Project Home: {pushtext_meta['homepage']}\n
+            """
         )
         quit()
 
-    body = {}
+    body: dict = {}
     if args.user_key is not None:
         if length_chk("user_key", args.user_key):
-            body["user"] = args.user_key
+            body["user"]: str = args.user_key
     else:
-        body["user"] = read_config("user_key")
+        body["user"]: str = read_config("user_key")
 
     if args.api_token is not None:
         if length_chk("api_token", args.api_token):
             body["token"] = str(args.api_token)
     else:
-        body["token"] = read_config("api_token")
+        body["token"]: str = read_config("api_token")
 
     if args.priority is None:
-        body["priority"] = 0
+        body["priority"]: int = 0
     elif args.priority.lower() in ["high", "hi", "h"]:
-        body["priority"] = 1
+        body["priority"]: int = 1
     elif args.priority.lower() in ["low", "lo", "l"]:
-        body["priority"] = -1
+        body["priority"]: int = -1
     else:
-        body["priority"] = 0
+        body["priority"]: int = 0
 
     if args.device is not None:
         if length_chk("device", args.device):
-            body["device"] = str(args.device)
+            body["device"]: str = args.device
 
     if length_chk("title", args.title):
-        body["title"] = str(args.title)
+        body["title"]: str = args.title
 
     if length_chk("message", args.message):
-        body["message"] = str(args.message)
+        body["message"]: str = args.message
 
     if args.URL is not None:
         if length_chk("url", str(args.URL)):
-            body["url"] = str(args.URL)
+            body["url"]: str = args.URL
         if args.URL_title is not None:
             if length_chk("url_title", str(args.URL_title)):
-                body["url_title"] = str(args.URL_title)
+                body["url_title"]: str = args.URL_title
         else:
-            body["url_title"] = "PushText URL"
+            body["url_title"]: str = "PushText URL"
 
     send_message(body)
 
 
-def send_message(body):
-    base_url = "api.pushover.net"
-    send_url = f"https://{base_url}/1/messages.json"
+def send_message(body) -> bool:
+    base_url: str = "api.pushover.net"
+    send_url: str = f"https://{base_url}/1/messages.json"
     try:
-        request = requests.post(send_url, body)
-        if int(str(request.status_code)[:1]) != 2:
+        request: requests = requests.post(send_url, body)
+        if not request.ok:
             quit(f"{request.status_code}: {request.reason}\n{request.content}")
         else:
             return True
@@ -94,7 +94,7 @@ def send_message(body):
         quit(e)
 
 
-def read_config(needful):
+def read_config(needful: str) -> str:
     if not os.path.exists(pushtext_meta['configfile']):
         set_config()
     else:
@@ -106,14 +106,14 @@ def read_config(needful):
         set_config()
 
 
-def set_config():
-    user_config = {}
+def set_config() -> None:
+    user_config: dict = {}
 
     print("\nHint: Create an app here -> https://pushover.net/apps\n")
-    user_config["api_token"] = get_query("api_token", "Application Token: ")
+    user_config["api_token"]: str = get_query("api_token", "Application Token: ")
 
     print("\nHint: User Key will be shown after logging in -> https://pushover.net\n")
-    user_config["user_key"] = get_query("user_key", "User Key: ")
+    user_config["user_key"]: str = get_query("user_key", "User Key: ")
 
     with open(pushtext_meta['configfile'], "w") as config_file:
         json.dump(user_config, config_file, indent=4, sort_keys=True)
@@ -122,7 +122,7 @@ def set_config():
     quit()
 
 
-def get_query(key, prompt):
+def get_query(key: str, prompt: str) -> str:
     try:
         user_input = input(prompt)
         if length_chk(key, user_input):
@@ -133,8 +133,8 @@ def get_query(key, prompt):
         quit(e)
 
 
-def length_chk(key, value):
-    lengths = {
+def length_chk(key: str, value: str) -> bool:
+    lengths: dict = {
         "message": 1024,
         "title": 250,
         "url": 512,
@@ -145,13 +145,13 @@ def length_chk(key, value):
     }
     if value == "":
         quit(f"{key.title()} cannot be empty")
-    elif value.__len__() > lengths[key.lower()]:
+    elif len(value) > lengths[key.lower()]:
         quit(f"{key.title()} must under {lengths[key.lower()]} characters")
     else:
         return True
 
 
-def setup_argparse():
+def setup_argparse() -> argparse:
     parser = argparse.ArgumentParser(
         description="PushText: Command line tool for http://pushover.net", prog="push_text.py"
     )
